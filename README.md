@@ -6,7 +6,7 @@ Balanced Tree Clothing Company prides themselves on providing an optimised range
 
 fashion company has asked you to assist the team’s merchandising teams analyse their sales performance and generate a basic financial report to share with the wider business.
 
-Available Data
+### Available Data
 
 For this case study there is a total of 4 datasets for this case study - however you will only need to utilise 2 main tables to solve all of the regular questions, and the additional 2 tables are used only for the bonus challenge question!
 
@@ -18,15 +18,15 @@ For this case study there is a total of 4 datasets for this case study - however
 
 ![image](https://user-images.githubusercontent.com/89623051/142980464-5637812d-0d60-443c-b811-cffa451af2ff.png)
 
-Case Study Questions
+### Case Study Questions
 
-The following questions can be considered key business questions and metrics that the Balanced Tree team requires for their monthly reports.
+##### The following questions can be considered key business questions and metrics that the Balanced Tree team requires for their monthly reports.
 
-Each question can be answered using a single query - but as you are writing the SQL to solve each individual problem, keep in mind how you would generate all of these metrics in a single SQL script which the Balanced Tree team can run each month.
+##### Each question can be answered using a single query - but as you are writing the SQL to solve each individual problem, keep in mind how you would generate all of these metrics in a single SQL script which the Balanced Tree team can run each month.
 
-A. High Level Sales Analysis
+### . High Level Sales Analysis
 
-What was the total quantity sold for all products?
+##### What was the total quantity sold for all products?
 
 ```sql
 select prod_id, sum(qty) as total_quantity
@@ -34,29 +34,29 @@ from balanced_tree.sales
 group by prod_id
 order by total_quantity desc
 ```
-What is the total generated revenue for all products before discounts?
+##### What is the total generated revenue for all products before discounts?
 
 ```sql
 select sum(qty*price) as total_revenue
 from balanced_tree.sales
 ```
 
-What was the total discount amount for all products?
+##### What was the total discount amount for all products?
 
 ```sql
 select sum(qty*price*discount)/100 as total_discount
 from balanced_tree.sales
 ```
 
-Part B. Transaction Analysis
+### Part B. Transaction Analysis
 
-Question 1 How many unique transactions were there?
+##### Question 1 How many unique transactions were there?
 
 ```sql
 select count(distinct txn_id) 
 from balanced_tree.sales
 ```
-Question 2 What is the average unique products purchased in each transaction?
+##### Question 2 What is the average unique products purchased in each transaction?
 
 ```sql
 
@@ -66,7 +66,7 @@ group by txn_id
 limit 1
 ```
 
-Question 3 What are the 25th, 50th and 75th percentile values for the revenue per transaction?
+##### Question 3 What are the 25th, 50th and 75th percentile values for the revenue per transaction?
 
 ```sql
 with base as(
@@ -80,7 +80,7 @@ select
   percentile_cont(0.75) within group(order by(total_revenue)) as revenue_per_txn_75perc
 from base
 
-Question 4 What is the average discount value per transaction?
+##### Question 4 What is the average discount value per transaction?
 
 select round (avg(sum(qty*price*discount)) over()/100 ,2) as avg_discout_txn
 from balanced_tree.sales
@@ -88,7 +88,7 @@ group by txn_id
 limit 1
 ```
 
-Question 5 What is the percentage split of all transactions for members vs non-members?
+##### Question 5 What is the percentage split of all transactions for members vs non-members?
 
 ```sql
 select  
@@ -97,7 +97,7 @@ select
 from balanced_tree.sales
 ```
 
-Question 6 What is the average revenue for member transactions and non-member transactions?
+##### Question 6 What is the average revenue for member transactions and non-member transactions?
 
 ```sql
 
@@ -110,9 +110,9 @@ from base
 group by member
 ```
 
-Part C. Product Analysis
+### Part C. Product Analysis
 
-Question 1 What are the top 3 products by total revenue before discount?
+##### Question 1 What are the top 3 products by total revenue before discount?
 
 ```sql
 select sum(s.qty*s.price) as total_revenue, s.prod_id, pd.product_name
@@ -124,7 +124,7 @@ order by total_revenue desc
 limit 3
 ```
 
-Question 2 What is the total quantity, revenue and discount for each segment?
+##### Question 2 What is the total quantity, revenue and discount for each segment?
 
 ```sql
 with base as (
@@ -149,7 +149,7 @@ group by segment_name
 
 ```
 
-Question 3 What is the top selling product for each segment?
+##### Question 3 What is the top selling product for each segment?
 
 
 ```sql
@@ -170,7 +170,7 @@ select *
 from tb1 where rn = 1
 ```
 
-Question 4 What is the total quantity, revenue and discount for each category?
+##### Question 4 What is the total quantity, revenue and discount for each category?
 
 ```sql
 select 
@@ -184,7 +184,7 @@ on s.prod_id = pd.product_id
 group by  category_name
 ```
 
-Question 5 What is the top selling product for each category?
+##### Question 5 What is the top selling product for each category?
 
 ```sql
 with base as (
@@ -208,7 +208,7 @@ from tb1
 where rn = 1
 ```
 
-Question 6 What is the percentage split of revenue by product for each segment?
+##### Question 6 What is the percentage split of revenue by product for each segment?
 
 ```sql
 select 
@@ -222,7 +222,7 @@ on s.prod_id = pd.product_id
 group by product_name, segment_name
 ```
 
-Question 7 What is the percentage split of revenue by segment for each category?
+##### Question 7 What is the percentage split of revenue by segment for each category?
 
 ```sql
 select 
@@ -239,7 +239,7 @@ group by  segment_name, segment_id,category_name, category_id
 order by segment_id asc, category_id asc
 ```
 
-Question 8 What is the percentage split of total revenue by category?
+##### Question 8 What is the percentage split of total revenue by category?
 
 ```sql
 select 
@@ -254,7 +254,7 @@ group by  category_name, category_id
 order by category_id asc
 ```
 
-Question 9 What is the total transaction “penetration” for each product? (hint: penetration = number of transactions 
+##### Question 9 What is the total transaction “penetration” for each product? (hint: penetration = number of transactions 
 
           where at least 1 quantity of a product was purchased divided by total number of transactions)
 
@@ -283,7 +283,7 @@ select *
 from penetration
 order by penetration_rate desc
 ```
-Question 10 What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
+##### Question 10 What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
 
 -- step 1: check the product_counter...
 ```sql
